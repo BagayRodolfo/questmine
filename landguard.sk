@@ -1,0 +1,106 @@
+command /landguard [<text>] [<text>] [<text>] [<text>]:
+	trigger:
+		if argument 1 = "pos1":
+			if player has permission "landguard.setpos":
+				set {landguard::%player%::pos1} to player's location
+			else:
+				message "You dont have the permission to set landguard" to player
+		else if argument 1 = "pos2":
+			if player has permission "landguard.setpos":
+				set {landguard::%player%::pos2} to player's location
+			else:
+				message "You dont have the permission to set landguard" to player
+		else if argument 1 = "posclear":
+			if player has permission "landguard.setpos":
+				set {landguard::%player%::pos1} to air
+				set {landguard::%player%::pos2} to air
+			else:
+				message "You dont have the permission to set landguard" to player
+		else if argument 1 = "list":
+			if player has permission "landguard.list":
+				loop {landguard::listofarea::*}:
+					message "%loop-value%" to player
+			else: 
+				message "You dont have the permission to view landguard list"
+		else if argument 1 = "info":
+			if player has permission "landguard.info":
+				message "Name: %argument 2%" to player
+				message "Pos1: %{landguard::positions::%argument 2%::pos1}%" to player
+				message "Pos2: %{landguard::positions::%argument 2%::pos2}%" to player
+				message "Perms: %{landguard::perms::%argument 2%}%" to player
+				loop {landguard::customtags::%argument 2%::*}:
+					message "Custom Tags: %loop-value%" to player
+		else if argument 1 = "remove":
+			if player has permission "landguard.remove":
+				if argument 2 is not empty:
+					loop {landguard::listofarea::*}:
+						if loop-value = argument 2:
+							clear {landguard::listofarea::%loop-value%}
+							set {landguard::positions::%loop-value%::pos1} to air
+							set {landguard::positions::%loop-value%::pos2} to air
+							message "Removing %loop-value%" to player
+							stop
+					message "landguard name does not exist"			
+				else:
+					message "There is no name declared for deletion" to player
+		else if argument 1 = "set":
+			if player has permission "landguard.setattr":
+				if argument 2 is not empty:
+					loop {landguard::listofarea::*}:
+						if argument 2 = loop-value:
+							if argument 3 is not empty:
+								if argument 4 is not empty:
+									set {landguard::customtags::%argument 2%::%argument 3%} to argument 4
+								else:
+									message "Cannot set %argument 3% to nothing" to player
+									stop
+							else:
+								message "No Attribute Specified" to player
+								stop
+					message "Cannot find landguard name"
+					stop
+				else:	
+					message "No location Specified" to player
+					stop
+			else:
+				message "You dont have the permission to set attribute a protected area"
+				stop
+		else if argument 1 = "add":
+			if player has permission "landguard.add":
+				if argument 2 is not empty:
+					loop {landguard::listofarea::*}:
+						if loop-value = argument 2:
+							message "Name already Exist" to player
+							stop
+					if {landguard::%player%::pos1} is empty:
+						message "Position 1 is not set" to player
+						stop
+					if {landguard::%player%::pos2} is empty:
+						message "Position 2 is not set" to player
+						stop
+					set {landguard::listofarea::%argument 2%} to argument 2
+					set {landguard::positions::%argument 2%::pos1} to {landguard::%player%::pos1}
+					set {landguard::positions::%argument 2%::pos2} to {landguard::%player%::pos2}
+				else:
+					message "There is no name declared for new landguard" to player
+			else:
+				message "You dont have the permission to create new landguard" to player
+on build: 
+	loop {landguard::listofarea::*}:
+		set {_x1} to x-coordinate of {landguard::positions::%loop-value%::pos1}
+		set {_y1} to y-coordinate of {landguard::positions::%loop-value%::pos1}
+		set {_z1} to z-coordinate of {landguard::positions::%loop-value%::pos1}
+		set {_x2} to x-coordinate of {landguard::positions::%loop-value%::pos2}
+		set {_y2} to y-coordinate of {landguard::positions::%loop-value%::pos2}
+		set {_z2} to z-coordinate of {landguard::positions::%loop-value%::pos2}
+
+		set {_xb} to x-coordinate of the block's location
+		set {_yb} to y-coordinate of the block's location
+		set {_zb} to z-coordinate of the block's location
+
+		if {_zb} <= {_z1} and {_zb} >= {_z2}:
+			if {_yb} <= {_y1} and {_yb} >= {_y2}:
+				if {_xb} <= {_x1} and {_xb} >= {_x2}:
+					message "Cannot build here. Server Protected Area" to player
+					cancel event
+					stop

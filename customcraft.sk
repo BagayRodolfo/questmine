@@ -1,0 +1,536 @@
+options:
+	consgoldbar: 4
+	outgoldbar: 1
+	waitfor: 2
+	conscrystal: 16
+	outcrystal: 1
+	waitforc: 4
+on load:
+	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
+	register new shaped recipe for {_chestplate} using oak_plank, air, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank
+	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
+	register new shaped recipe for {_chestplate} using oak_plank, oak_plank, oak_plank, oak_plank, air, oak_plank, oak_plank, air, oak_plank
+	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
+	register new shaped recipe for {_chestplate} using oak_plank, oak_plank, oak_plank, oak_plank, air, oak_plank, air, air, air
+	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
+	register new shaped recipe for {_chestplate} using air, air, air, oak_plank, air, oak_plank, oak_plank, air, oak_plank
+	
+	#
+	# Patterns
+	#
+	set {pattern::1} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
+	set {pattern::2} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
+	set {pattern::3} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
+	set {pattern::4} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
+	set {pattern::5} to wooden pressure plate named "&3Pattern" with lore "&5Item:sword"
+	set {pattern::6} to wooden pressure plate named "&3Pattern" with lore "&5Item:axe"
+	set {pattern::7} to wooden pressure plate named "&3Pattern" with lore "&5Item:hoe"
+	set {pattern::8} to wooden pressure plate named "&3Pattern" with lore "&5Item:pickaxe"
+	set {pattern::9} to wooden pressure plate named "&3Pattern" with lore "&5Item:shovel"
+	#
+	# Materials
+	#
+	set {material::1} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
+	set {material::2} to iron ingot named "<gold>Iron bar" with lore "&5Material:iron"
+	set {material::3} to diamond named "<gold>Diamond Plate" with lore "&5Material:diamond"
+	#
+	# Cost
+	#
+	set {cost::sword} to "2||1"
+	set {cost::axe} to "3||2"
+	set {cost::pickaxe} to "3||2"
+	set {cost::shovel} to "1||2"
+	set {cost::hoe} to "2||2"
+	set {cost::helm} to "5||0"
+	set {cost::chestplate} to "8||0"
+	set {cost::leggings} to "7||0"
+	set {cost::boots} to "4||0"
+on rightclick on a oak plank:
+	set {_wood} to targeted block
+	set {_h} to hopper 
+	if checkBlock({_wood}, {_h}) != empty:
+		message "test" to player
+on rightclick on a obsidian:
+	set {_obsi} to targeted block
+	set {_iron} to block below {_obsi}
+	set {_hand} to amount of player's held item in player's inventory
+	if {_iron} is iron_block:
+		cancel event
+		if player's held item is gold ingot:
+			if players's held item is not gold ingot named "<gold>Gold bar":
+				if {_hand} >= {@consgoldbar}:
+					goldbar({@consgoldbar}, player, target block)
+				else:
+					send "insufient gold ingots" to player
+		else if player's held item is iron ingot:
+			if players's held item is not iron ingot named "<gold>Iron bar":
+				if {_hand} >= {@consgoldbar}:
+					ironbar({@consgoldbar}, player, target block)
+				else:
+					send "insufient gold ingots" to player		
+		else if player's held item is diamond:
+			if players's held item is not diamond named "<gold>diamond plate":
+				if {_hand} >= {@consgoldbar}:
+					diamondplate({@consgoldbar}, player, target block)
+				else:
+					send "insufient gold ingots" to player
+		else if player's held item is stone:
+			if {_hand} >= {@conscrystal}:
+				crystal({@conscrystal}, player, target block)
+		else if name of player's held item is "&3Pattern":
+			set {_inv} to checkBlock({_iron}, hopper)
+			if {_inv} is hopper:
+				set {_p} to empty
+				set {_m} to empty
+				set {_s} to empty
+				if number of air in {_inv}'s inventory  = 27:
+					message "Tool crafter is empty" to player
+					stop
+				loop {pattern::*}:
+					loop items in {_inv}'s inventory:
+						if lore of loop-value-1 = lore of loop-value-2:
+							set {_p} to loop-value-2
+							exit 2 loops
+				if {_p} = empty:
+					message "No pattern detected. Please craft patterns using wooden tool" to player
+					stop
+				loop {material::*}:
+					loop items in {_inv}'s inventory:
+						if lore of loop-value-1 = lore of loop-value-2:
+							set {_m} to loop-value-2
+							exit 2 loops
+				if {_m} = empty:
+					message "No valid material detected. Please right click meterials to too crafter" to player
+					stop
+				loop items in {_inv}'s inventory:
+					if loop-value = stick:
+						set {_s} to loop-value
+						exit 1 loop
+				set {_itm::*} to toolcraft({_p}, {_m} ,{_s}, player)
+				
+				loop items in {_inv}'s inventory:
+					set loop-value to air
+				add {_itm::2} to {_inv}'s inventory
+				add {_itm::3} to {_inv}'s inventory
+				add {_itm::4} to {_inv}'s inventory
+				set {_xx} to {_itm::1}
+				set {_container} to block above {_obsi}
+				if {_container} = chest:
+					if {_container} has enough space for {_xx}:
+						add {_xx} to {_container}'s inventory
+						stop
+				drop {_xx} at block above {_obsi}
+			else:
+				message "Not a tool crafter" to player
+
+on craft wooden tools:
+	set {_n} to "%item%" parsed as a text
+	set {_w::*} to {_n} split by "_"
+	set item to wooden pressure plate named "&3Pattern" with lore "&5Item:%{_w::2}%"
+on craft diamond tools:
+	cancel event
+	message "Please craft patterns using wooden tool and use a tool crafter" to player
+on craft iron tools:
+	cancel event
+	message "Please craft patterns using wooden tool and use a tool crafter" to player
+on craft gold tools:
+	cancel event
+	message "Please craft patterns using wooden tool and use a tool crafter" to player
+on rightclick holding blue glass block:
+	if player's held item is blue glass block named "<blue>Mana Stone":
+		cancel event
+		if {useMana.%player%} is not set:
+			set {useMana.%player%} to false
+		if {useMana.%player%} is false:
+			if item amount of players's tool is 1:
+				set player's held item to air
+			else:
+				remove 1 from item amount of player's tool
+			set {useMana.%player%} to true
+			send "Charging your mana" to player
+			wait 400 ticks
+			add 1 to {cMana.%player%}
+			send "<blue>Mana:  <white>%{cMana.%player%}%" to player
+			set {useMana.%player%} to false
+		else:
+			send "Charging your mana please wait" to player
+function toolcraft(t: item, m: item, s: item, p: player) :: items:
+	set {_pat::*} to lore of {_t} split by ":"
+	set {_mat::*} to lore of {_m} split by ":"
+	set {_c} to {cost::%{_pat::2}%}
+	set {_x::*} to {_c} split by "||"
+	set {_ma} to "%{_x::1}%" parsed as an integer
+	set {_sa} to "%{_x::2}%" parsed as an integer
+	if item size of {_m} > {_ma}:
+		set item size of {_m} to item size of {_m} - {_ma}
+	else:
+		stop
+	if {_s} is not air:
+		if item size of {_s} > {_sa}:
+			set item size of {_s} to item size of {_s} - {_sa}
+		else:
+			stop
+	set {_ret::1} to ("%{_mat::2}% %{_pat::2}%" parsed as an item) named "&5Pure %{_mat::2}% %{_pat::2}%" with lore "&7Soulbound-%{_p}%"
+	set {_ret::2} to {_t}
+	set {_ret::3} to {_m}
+	set {_ret::4} to {_s}
+	return {_ret::*}
+function goldbar(r: number, p: player, b: block):
+	if {_p} has enough space for gold ingot named "<gold>Gold Bar" with lore "&5Material:gold":
+		if item amount of {_p}'s tool is {_r}:
+			set {_p}'s held item to air
+		else:
+			remove {_r} from item amount of {_p}'s tool
+		send "Crafting <gold>Gold Bar" to {_p}
+		loop {@waitfor} * 2 times:
+			wait for 10 ticks
+			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
+			play lava pop on {_b}
+		play mob spawner flames on {_b}
+		set {_i} to 1 gold ingot named "<gold>Gold Bar" with lore "&5Material:gold"
+		add {_i} to the inventory of {_p} 
+		send "Successfuly crafted a <gold>Gold Bar" to {_p}
+	else:
+		send "You dont have enough space for a <gold>Gold bar" to {_p}
+function ironbar(r: number, p: player, b: block):
+	if {_p} has enough space for iron ingot named "<gold>Iron Bar" with lore "&5Material:iron":
+		if item amount of {_p}'s tool is {_r}:
+			set {_p}'s held item to air
+		else:
+			remove {_r} from item amount of {_p}'s tool
+		send "Crafting <gold>Iron Bar" to {_p}
+		loop {@waitfor} * 2 times:
+			wait for 10 ticks
+			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
+			play lava pop on {_b}
+		play mob spawner flames on {_b}
+		set {_i} to 1 iron ingot named "<gold>Iron Bar" with lore "&5Material:iron"
+		add {_i} to the inventory of {_p} 
+		send "Successfuly crafted a <gold>Iron Bar" to {_p}
+	else:
+		send "You dont have enough space for a <gold>Iron bar" to {_p}
+function diamondplate(r: number, p: player, b: block):
+	if {_p} has enough space for diamond named "<gold>Diamond Plate" with lore "&5Material:diamond":
+		if item amount of {_p}'s tool is {_r}:
+			set {_p}'s held item to air
+		else:
+			remove {_r} from item amount of {_p}'s tool
+		send "Crafting <gold>Diamond Plate" to {_p}
+		loop {@waitfor} * 2 times:
+			wait for 10 ticks
+			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
+			play lava pop on {_b}
+		play mob spawner flames on {_b}
+		set {_i} to 1 diamond named "<gold>Diamond Plate" with lore "&5Material:diamond"
+		add {_i} to the inventory of {_p} 
+		send "Successfuly crafted a <gold>Diamond Plate" to {_p}
+	else:
+		send "You dont have enough space for a <gold>Iron bar" to {_p}
+function crystal(r: number, p: player, b: block):
+	if {_p} has enough space for blue glass block named "<blue>Mana Stone":
+		if item amount of {_p}'s tool is {_r}:
+			set {_p}'s held item to air
+		else:
+			remove {_r} from item amount of {_p}'s tool
+		send "Crafting <blue>Mana Stone" to {_p}
+		loop {@waitforc} times:
+			wait for 1 second
+			play sound "entity.experience_orb.pickup" with volume 1 and pitch 2 at {_b}'s location for all players
+			play 2 magical critical hit on {_b}
+		play mob spawner flames on {_b}
+		add 1 blue glass block named "<blue>Mana Stone" to the inventory of {_p} 
+		send "Successfuly crafted a <blue>Mana Stone" to {_p}
+
+#
+# CRAFT UTILITY
+#
+function checkBlock(m: block, s: item) :: block:
+	if the block north of {_m} is {_s}:
+		return block north of {_m}
+	else if the block south of {_m} is {_s}:
+		return block south of {_m}
+	else if the block east of {_m} is {_s}:
+		return block east of {_m}
+	else if the block west of {_m} is {_s}:
+		return block west of {_m}
+#
+# SOUL BOUNDING
+#
+on pickup:
+	set {_lore::*} to lore of item split by "||"
+	loop {_lore::*}:
+		if loop-value contains "&7SoulBound":
+			set {_x::*} to loop-value split by "-"
+			if {_x::2} is not equal to player's name:
+				cancel event
+on inventory click:
+	set {_lore::*} to lore of item split by "||"
+	loop {_lore::*}:
+		if loop-value contains "&7SoulBound":
+			set {_x::*} to loop-value split by "-"
+			if {_x::2} is not equal to player's name:
+				message "This item is bounded to %{_x::2}%."
+				cancel event
+#
+# ENCHANT UTILITY
+#
+function romanNum(d: text) :: integer:
+	if {_d} is equal to "I":
+		return 1
+	else if {_d} is equal to  "II":
+		return  2
+	else if {_d} = "III":
+		return 3
+	else if {_d} = "IV":
+		return 4
+	else:
+		return 5
+function numRoman(i: integer) :: string:
+	if {_i} = 1:
+		return "I"
+	else if {_i} = 2:
+		return "II"
+	else if {_i} = 3:
+		return "III"
+	else if {_i} = 4:
+		return "IV"
+	else:
+		return "V"
+on join:
+	if {cMana.%player%} is not set:
+		set {cMana.%player%} to 50
+		message "First Join Mana: %{cMana.%player%}%" to player
+	else:
+		message "Current Mana: %{cMana.%player%}%" to player
+	message "This is an english community. Please use english when conversing. Chatting other language on global chat will be warn." to player
+	message "Not stopping on chatting other languages will be mute." to player
+#
+# ENCHANT DAMAGE EVENT
+#
+on damage:
+	if lore of damager's held item is not equal to "":
+		set {_lore::*} to lore of damager's held item split by "||"
+		loop {_lore::*}:
+			if loop-value contains "&7Undead":
+				set {_x::*} to loop-value split by " "
+				doWither(damager,victim,{_x::2})
+			else if loop-value contains "&7Toxic":
+				set {_x::*} to loop-value split by " "
+				doToxic(damager,victim,{_x::2})
+			else if loop-value contains "&7Freeze":
+				set {_x::*} to loop-value split by " "
+				doFreeze(damager,victim,{_x::2})
+			else if loop-value contains "&7Confusion":
+				set {_x::*} to loop-value split by " "
+				doConfusion(damager,victim,{_x::2})
+			else if loop-value contains "&7Blind":
+				set {_x::*} to loop-value split by " "
+				doBlind(damager,victim,{_x::2})
+			else if loop-value contains "&7Weakness":
+				set {_x::*} to loop-value split by " "
+				doWeak(damager,victim,{_x::2})
+			else if loop-value contains "&7Fatigue":
+				set {_x::*} to loop-value split by " "
+				doFatigue(damager,victim,{_x::2})
+			else if loop-value contains "&7Hunger":
+				set {_x::*} to loop-value split by " "
+				doHunger(damager,victim,{_x::2})
+on rightclick:
+	if lore of player's held item is not equal to "":
+		set {_lore::*} to lore of player's held item split by "||"
+		loop {_lore::*}:
+			if loop-value contains "&7Dash":
+				set {_x::*} to loop-value split by " "
+				doDash(player,{_x::2})
+			else if loop-value contains "&7Backstab":
+				set {_x::*} to loop-value split by " "
+				doBackstab(player,{_x::2})
+			else if loop-value contains "&7Stomp":
+				set {_x::*} to loop-value split by " "
+				doStomp(player,{_x::2})
+#
+# ENCHANT APPLY
+#
+#	PASSIVE SKILLS
+#
+function doWither(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+			remove "%romanNum({_l})%" parsed as a number / 10 from {cMana.%{_d}%}
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doToxic(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply poison to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doFreeze(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply slowness to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply slowness to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doConfusion(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply nausea to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply nausea to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doBlind(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply blindness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply blindness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doWeak(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply weakness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply weakness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doFatigue(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply mining fatigue to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply mining fatigue to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doHunger(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply hunger to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply hunger to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+#	
+#	ACTIVE SKILLS
+#
+function doDash(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		push {_d} forward at speed romanNum({_l}) * 0.9
+		remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+function doBackstab(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		set {_v} to {_d}'s target
+		if {_d}'s target is an entity:
+			if distance between {_v}'s location and {_d}'s location <= "%romanNum({_l})%" parsed as a number + 5:
+				teleport {_d} to {_d}'s target
+				remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+function doStomp(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		set {_range} to "%romanNum({_l})%" parsed as a number + 2
+		set {_loc} to {_d}'s location
+		play 3 large explosion on {_loc}
+		play sound "entity.generic.explode" with volume 1 and pitch 1 at {_d}'s location for all players
+		loop entities in radius {_range} of {_d}:
+			if loop-value != {_d}:
+				push loop-value upward at speed (romanNum({_l}) * 0.4) + 1
+		remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+#
+# ENCHANT COMMAND
+#
+command /mana [<text>] [<integer>]:
+	trigger:
+		if argument 1 = "add":
+			add argument 2 to {cMana.%player%}
+		else:
+			message "Mana: %{cMana.%player%}%" to player
+command /kench <text> <text> <integer>:
+	trigger:
+		if argument 1 = "add":
+			if argument 2 contains "Soulbound":
+				if lore of player's held item is equal to "":
+					set player's held item to player's held item with lore "&7%argument 2%" 
+				else:
+					set player's held item to player's held item with lore "%lore of player's held item%||&7%argument 2%"
+			else:		
+				if lore of player's held item is equal to "":
+					set player's held item to player's held item with lore "&7%argument 2% %numRoman(argument 3)%" 
+				else:
+					set player's held item to player's held item with lore "%lore of player's held item%||&7%argument 2% %numRoman(argument 3)%"
+		else if argument 1 = "remove":
+			if lore of player's held item is equal to "":
+				message "The is no enchantment like %argument 1% to this item" to player
+			else:
+				loop lore of player's held item split by "||":
+					if loop-value contains argument 2:
+						set {_lore} to "%loop-value%||%{_lore}%"
+				set player's held item to player's held item with lore {_lore}
+		else if argument 1 = "all":
+			set {_i} to player's held item
+			set lore of {_i} to ""
+command /test:
+	trigger:
+		set {_x} to gold sword named "&4&lGold Sword" with lore "&7SoulBound-%player%||&7Dash I"
+		give {_x} to player
+command /spell buff <text> <player>:
+	description: Cast a spell to player
+	usage: /spell buff <buffname> <player>
+	trigger:
+		if argument 1 = "nv1":
+			night_vision(1,argument 2)
+		else if argument 1 = "nv2":
+			night_vision(2,argument 2)
+		else if argument 1 = "nv3":
+			night_vision(3,argument 2)
+		else if argument 1 = "nv4":
+			night_vision(4,argument 2)
+		else:
+			send "Invalid Spell" to player
+
+function night_vision(n: number, p: player):
+	if {_n} is equal to 1:
+		if {cMana.%{_p}%} >= 1:
+			add -1 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 8 minutes
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else if {_n} is equal to 2:
+		if {cMana.%{_p}%} >= 3:
+			add -3 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 24 minutes
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else if {_n} is equal to 3:
+		if {cMana.%{_p}%} >= 9:
+			add -9 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 1 hour
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else:
+		if {cMana.%{_p}%} >= 25:
+			add -25 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 3 hours
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	
