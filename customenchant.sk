@@ -1,0 +1,280 @@
+#
+# SOUL BOUNDING
+#
+on pickup:
+	set {_lore::*} to lore of item split by "||"
+	loop {_lore::*}:
+		if loop-value contains "&7SoulBound":
+			set {_x::*} to loop-value split by "-"
+			if {_x::2} is not equal to player's name:
+				cancel event
+on inventory click:
+	set {_lore::*} to lore of item split by "||"
+	loop {_lore::*}:
+		if loop-value contains "&7SoulBound":
+			set {_x::*} to loop-value split by "-"
+			if {_x::2} is not equal to player's name:
+				message "This item is bounded to %{_x::2}%."
+				cancel event
+#
+# ENCHANT UTILITY
+#
+function romanNum(d: text) :: integer:
+	if {_d} is equal to "I":
+		return 1
+	else if {_d} is equal to  "II":
+		return  2
+	else if {_d} = "III":
+		return 3
+	else if {_d} = "IV":
+		return 4
+	else:
+		return 5
+function numRoman(i: integer) :: string:
+	if {_i} = 1:
+		return "I"
+	else if {_i} = 2:
+		return "II"
+	else if {_i} = 3:
+		return "III"
+	else if {_i} = 4:
+		return "IV"
+	else:
+		return "V"
+on join:
+	if {cMana.%player%} is not set:
+		set {cMana.%player%} to 50
+		message "First Join Mana: %{cMana.%player%}%" to player
+	else:
+		message "Current Mana: %{cMana.%player%}%" to player
+	message "This is an english community. Please use english when conversing. Chatting other language on global chat will be warn." to player
+	message "Not stopping on chatting other languages will be mute." to player
+#
+# ENCHANT DAMAGE EVENT
+#
+on damage:
+	if lore of damager's held item is not equal to "":
+		set {_lore::*} to lore of damager's held item split by "||"
+		loop {_lore::*}:
+			if loop-value contains "&7Undead":
+				set {_x::*} to loop-value split by " "
+				doWither(damager,victim,{_x::2})
+			else if loop-value contains "&7Toxic":
+				set {_x::*} to loop-value split by " "
+				doToxic(damager,victim,{_x::2})
+			else if loop-value contains "&7Freeze":
+				set {_x::*} to loop-value split by " "
+				doFreeze(damager,victim,{_x::2})
+			else if loop-value contains "&7Confusion":
+				set {_x::*} to loop-value split by " "
+				doConfusion(damager,victim,{_x::2})
+			else if loop-value contains "&7Blind":
+				set {_x::*} to loop-value split by " "
+				doBlind(damager,victim,{_x::2})
+			else if loop-value contains "&7Weakness":
+				set {_x::*} to loop-value split by " "
+				doWeak(damager,victim,{_x::2})
+			else if loop-value contains "&7Fatigue":
+				set {_x::*} to loop-value split by " "
+				doFatigue(damager,victim,{_x::2})
+			else if loop-value contains "&7Hunger":
+				set {_x::*} to loop-value split by " "
+				doHunger(damager,victim,{_x::2})
+on rightclick:
+	if lore of player's held item is not equal to "":
+		set {_lore::*} to lore of player's held item split by "||"
+		loop {_lore::*}:
+			if loop-value contains "&7Dash":
+				set {_x::*} to loop-value split by " "
+				doDash(player,{_x::2})
+			else if loop-value contains "&7Backstab":
+				set {_x::*} to loop-value split by " "
+				doBackstab(player,{_x::2})
+			else if loop-value contains "&7Stomp":
+				set {_x::*} to loop-value split by " "
+				doStomp(player,{_x::2})
+#
+# ENCHANT APPLY
+#
+#	PASSIVE SKILLS
+#
+function doWither(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+			remove "%romanNum({_l})%" parsed as a number / 10 from {cMana.%{_d}%}
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doToxic(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply poison to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply wither to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doFreeze(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply slowness to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply slowness to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+function doConfusion(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply nausea to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply nausea to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doBlind(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply blindness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply blindness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doWeak(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply weakness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply weakness to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doFatigue(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply mining fatigue to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply mining fatigue to {_v} for "%romanNum({_l}) * 2% seconds" parsed as a timespan
+function doHunger(d: entity,v: entity,l: text):
+	if {_d} is a player:	
+		if {cMana.%{_d}%} >= romanNum({_l}) / 10:
+			apply hunger to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+		else:
+			message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+	else:
+		apply hunger to {_v} for "%romanNum({_l}) * 3% seconds" parsed as a timespan
+#	
+#	ACTIVE SKILLS
+#
+function doDash(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		push {_d} forward at speed romanNum({_l}) * 0.9
+		remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+function doBackstab(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		set {_v} to {_d}'s target
+		if {_d}'s target is an entity:
+			if distance between {_v}'s location and {_d}'s location <= "%romanNum({_l})%" parsed as a number + 5:
+				teleport {_d} to {_d}'s target
+				remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+function doStomp(d: entity,l: text):
+	if {cMana.%{_d}%} >= romanNum({_l}):
+		set {_range} to "%romanNum({_l})%" parsed as a number + 2
+		set {_loc} to {_d}'s location
+		play 3 large explosion on {_loc}
+		play sound "entity.generic.explode" with volume 1 and pitch 1 at {_d}'s location for all players
+		loop entities in radius {_range} of {_d}:
+			if loop-value != {_d}:
+				push loop-value upward at speed (romanNum({_l}) * 0.4) + 1
+		remove "%romanNum({_l})%" parsed as a number from {cMana.%{_d}%}
+	else:
+		message "Not enough mana. Current Mana: %{cMana.%{_d}%}%" to {_d}
+#
+# ENCHANT COMMAND
+#
+command /mana [<text>] [<integer>]:
+	trigger:
+		if argument 1 = "add":
+			add argument 2 to {cMana.%player%}
+		else:
+			message "Mana: %{cMana.%player%}%" to player
+command /kench <text> <text> <integer>:
+	trigger:
+		if argument 1 = "add":
+			if argument 2 contains "Soulbound":
+				if lore of player's held item is equal to "":
+					set player's held item to player's held item with lore "&7%argument 2%" 
+				else:
+					set player's held item to player's held item with lore "%lore of player's held item%||&7%argument 2%"
+			else:		
+				if lore of player's held item is equal to "":
+					set player's held item to player's held item with lore "&7%argument 2% %numRoman(argument 3)%" 
+				else:
+					set player's held item to player's held item with lore "%lore of player's held item%||&7%argument 2% %numRoman(argument 3)%"
+		else if argument 1 = "remove":
+			if lore of player's held item is equal to "":
+				message "The is no enchantment like %argument 1% to this item" to player
+			else:
+				loop lore of player's held item split by "||":
+					if loop-value contains argument 2:
+						set {_lore} to "%loop-value%||%{_lore}%"
+				set player's held item to player's held item with lore {_lore}
+		else if argument 1 = "all":
+			set {_i} to player's held item
+			set lore of {_i} to ""
+command /test:
+	trigger:
+		set {_x} to gold sword named "&4&lGold Sword" with lore "&7SoulBound-%player%||&7Dash I"
+		give {_x} to player
+command /spell buff <text> <player>:
+	description: Cast a spell to player
+	usage: /spell buff <buffname> <player>
+	trigger:
+		if argument 1 = "nv1":
+			night_vision(1,argument 2)
+		else if argument 1 = "nv2":
+			night_vision(2,argument 2)
+		else if argument 1 = "nv3":
+			night_vision(3,argument 2)
+		else if argument 1 = "nv4":
+			night_vision(4,argument 2)
+		else:
+			send "Invalid Spell" to player
+
+function night_vision(n: number, p: player):
+	if {_n} is equal to 1:
+		if {cMana.%{_p}%} >= 1:
+			add -1 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 8 minutes
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else if {_n} is equal to 2:
+		if {cMana.%{_p}%} >= 3:
+			add -3 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 24 minutes
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else if {_n} is equal to 3:
+		if {cMana.%{_p}%} >= 9:
+			add -9 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 1 hour
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+	else:
+		if {cMana.%{_p}%} >= 25:
+			add -25 to {cMana.%{_p}%}
+			remove night vision from {_p}
+			apply night vision to {_p} for 3 hours
+			send "<blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
+		else:
+			send "Not enough mana. <blue>Mana:  <white>%{cMana.%{_p}%}%" to {_p}
