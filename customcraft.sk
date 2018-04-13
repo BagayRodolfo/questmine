@@ -18,119 +18,177 @@ on load:
 	#
 	# Patterns
 	#
-	set {pattern::1} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
-	set {pattern::2} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
-	set {pattern::3} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
-	set {pattern::4} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
-	set {pattern::5} to wooden pressure plate named "&3Pattern" with lore "&5Item:sword"
-	set {pattern::6} to wooden pressure plate named "&3Pattern" with lore "&5Item:axe"
-	set {pattern::7} to wooden pressure plate named "&3Pattern" with lore "&5Item:hoe"
-	set {pattern::8} to wooden pressure plate named "&3Pattern" with lore "&5Item:pickaxe"
-	set {pattern::9} to wooden pressure plate named "&3Pattern" with lore "&5Item:shovel"
+	
+	
+	
+	
+	
+	
+	
+	
 
-	set {pattern_m::1} to wooden pressure plate named "&3Pattern" with lore "&5Material:nail"
-	set {pattern_m::2} to wooden pressure plate named "&3Pattern" with lore "&5Material:rivet"
+	
+	
 	#
-	# Materials
+	# VALID ITEMS FOR 
 	#
-	set {material::1} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
-	set {material::2} to iron ingot named "<gold>Iron bar" with lore "&5Material:iron"
-	set {material::3} to diamond named "<gold>Diamond Plate" with lore "&5Material:diamond"
+	set {v::1} to iron ingot named "<white>Iron bar" with lore "&5Material:iron"
+	set {v::2} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
+	set {v::3} to diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
 	#
-	# Cost
+	# TOOL CRAFTER
 	#
-	set {cost::sword} to "2||1||1||1"
-	set {cost::axe} to "3||2||1||1"
-	set {cost::pickaxe} to "3||2||1||1"
-	set {cost::shovel} to "1||2||1||1"
-	set {cost::hoe} to "2||2||1||1"
-	set {cost::helm} to "5||0||0||2"
-	set {cost::chestplate} to "8||0||0||4"
-	set {cost::leggings} to "7||0||0||3"
-	set {cost::boots} to "4||0||0||2"
-
+	# -----------------------------MATERIAL PLATE
+	set {pattern_t::plate} to wooden pressure plate named "&3Pattern" with lore "&5Material:Plate"
+	set {cost_t::plate::c::1} to "4||2"
+	set {item_t::plate::v::1} to iron ingot
+	set {item_t::plate::p::1} to iron ingot named "<white>Iron bar" with lore "&5Material:iron"
+	set {cost_t::plate::c::2} to "4||2"
+	set {item_t::plate::v::2} to gold ingot
+	set {item_t::plate::p::2} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
+	set {cost_t::plate::c::3} to "4||2"
+	set {item_t::plate::v::3} to diamond
+	set {item_t::plate::p::3} to diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
+	set {item_t::plate::s::1} to coal
+	# -----------------------------TOOL SWORD
+	set {pattern_t::sword} to wooden pressure plate named "&3Pattern" with lore "&5Item:sword"
+	set {cost_t::sword} to "2||1||1||1"
+	set {item_t::sword::v::*} to {v::*}
+	# -----------------------------TOOL AXE
+	set {pattern_t::axe} to wooden pressure plate named "&3Pattern" with lore "&5Item:axe"
+	set {cost_t::axe} to "3||2||1||1"
+	# -----------------------------TOOL PICKAXE
+	set {pattern_t::pickaxe} to wooden pressure plate named "&3Pattern" with lore "&5Item:pickaxe"
+	set {cost_t::pickaxe} to "3||2||1||1"
+	# -----------------------------TOOL SHOVEL
+	set {pattern_t::shovel} to wooden pressure plate named "&3Pattern" with lore "&5Item:shovel"
+	set {cost_t::shovel} to "1||2||1||1"
+	# -----------------------------TOOL HOE
+	set {pattern_t::hoe} to wooden pressure plate named "&3Pattern" with lore "&5Item:hoe"
+	set {cost_t::hoe} to "2||2||1||1"
+	# -----------------------------ARMOR HELM
+	set {pattern_t::helm} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
+	set {cost_t::helm} to "5||0||0||2"
+	# -----------------------------ARMOR CHESTPLATE
+	set {pattern_t::chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
+	set {cost_t::chestplate} to "8||0||0||4"
+	# -----------------------------ARMOR LEGGINGS
+	set {pattern_t::leggings} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
+	set {cost_t::leggings} to "7||0||0||3"
+	# -----------------------------ARMOR BOOTS
+	set {pattern_t::boots} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
+	set {cost_t::boots} to "4||0||0||2"
+	#
+	# MATERIAL CRAFTER
+	#
+	# -----------------------------MATERIAL NAIL
+	set {pattern_m::nail} to wooden pressure plate named "&3Pattern" with lore "&5Material:nail"
 	set {cost_m::nail} to "1||1"
+	set {item_m::nail::1} to iron ingot
+	set {item_m::nail::2} to coal
+	set {val::nail} to stick named "<white>Iron Nail" with lore "&5SubMaterial:nail"
+	# -----------------------------MATERIAL RIVET
+	set {pattern_m::rivet} to wooden pressure plate named "&3Pattern" with lore "&5Material:rivet"
 	set {cost_m::rivet} to "1||1"
+	set {item_m::rivet::1} to iron ingot
+	set {item_m::rivet::2} to charcoal
+	set {val::rivet} to stick named "<white>Iron Rivet" with lore "&5SubMaterial:rivet"
+
+# ---------- CRAFT TRIGGER EVENT
 on rightclick on a oak plank:
 	set {_wood} to targeted block
 	set {_h} to hopper 
 	set {_hopper} to checkBlock({_wood}, {_h})
+	message "Starting material crafter" to player
+	wait 10 ticks
+	if player's held item is not a bucket:
+		message "Hold a bucket to the material Crafter" to player
+		stop
 	if {_hopper} != empty:
-		message "test" to player
-		
+		stop
+	if number of air in {_hopper}'s inventory = 6:
+		message "Material Crafter is empty"
+		stop
+	set {_p} to empty
+	loop {pattern_m::*}:
+		loop items in {_hopper}'s inventory:
+			if lore of loop-value-1 = lore of loop-value-2:
+				set {_p} to loop-value-2
+				exit 2 loops
+	if {_p} = empty:
+		message "No pattern detected. Please craft patterns using wooden tools" to player
+		stop
+	set {_y} to lore of {_p}
+	set {_yy::*} to {_y} split by ":"
+	set {_x} to {cost_m::%{_yy::2}%}
+	set {_xx::*} to {_x} split by "||"
+	loop {item_m::%{_yy::2}%::*}:
+		set {_bool} to false
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				set {_bool} to true
+				exit 1 loop
+		if {_bool} = false:
+			message "Ingridient %loop-value-1% is missing" to player
+			stop
+	loop {item_m::%{_yy::2}%::*}:
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				if item size of loop-value-2 >= {_xx::%loop-index-1%}:
+					exit 1 loop
+				else:
+					message "Not enough %loop-value-1%" to player
+					stop
+	loop {item_m::%{_yy::2}%::*}:
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				set {_cnt} to {_xx::%loop-index-1%} parsed as a number
+				set {_cntx} to item size of loop-value-2
+				if {_cntx} - {_cnt} = 0:
+					set loop-value-2 to air
+					exit 1 loop
+				else:
+					set item size of loop-value-2 to item size of {_cntx} - {_cnt}
+					exit 1 loop
+	
 on rightclick on a obsidian:
 	set {_obsi} to targeted block
-	set {_iron} to block below {_obsi}
-	set {_hand} to amount of player's held item in player's inventory
-	if {_iron} is iron_block:
-		cancel event
-		if player's held item is gold ingot:
-			if players's held item is not gold ingot named "<gold>Gold bar":
-				if {_hand} >= {@consgoldbar}:
-					goldbar({@consgoldbar}, player, target block)
-				else:
-					send "insufient gold ingots" to player
-		else if player's held item is iron ingot:
-			if players's held item is not iron ingot named "<gold>Iron bar":
-				if {_hand} >= {@consgoldbar}:
-					ironbar({@consgoldbar}, player, target block)
-				else:
-					send "insufient gold ingots" to player		
-		else if player's held item is diamond:
-			if players's held item is not diamond named "<gold>diamond plate":
-				if {_hand} >= {@consgoldbar}:
-					diamondplate({@consgoldbar}, player, target block)
-				else:
-					send "insufient gold ingots" to player
-		else if player's held item is stone:
-			if {_hand} >= {@conscrystal}:
-				crystal({@conscrystal}, player, target block)
-		else if name of player's held item is "&3Pattern":
-			set {_inv} to checkBlock({_iron}, hopper)
-			if {_inv} is hopper:
-				set {_p} to empty
-				set {_m} to empty
-				set {_s} to empty
-				if number of air in {_inv}'s inventory  = 27:
-					message "Tool crafter is empty" to player
-					stop
-				loop {pattern::*}:
-					loop items in {_inv}'s inventory:
-						if lore of loop-value-1 = lore of loop-value-2:
-							set {_p} to loop-value-2
-							exit 2 loops
-				if {_p} = empty:
-					message "No pattern detected. Please craft patterns using wooden tool" to player
-					stop
-				loop {material::*}:
-					loop items in {_inv}'s inventory:
-						if lore of loop-value-1 = lore of loop-value-2:
-							set {_m} to loop-value-2
-							exit 2 loops
-				if {_m} = empty:
-					message "No valid material detected. Please right click meterials to too crafter" to player
-					stop
-				loop items in {_inv}'s inventory:
-					if loop-value = stick:
-						set {_s} to loop-value
-						exit 1 loop
-				set {_itm::*} to toolcraft({_p}, {_m} ,{_s}, player)
-				
-				loop items in {_inv}'s inventory:
-					set loop-value to air
-				add {_itm::2} to {_inv}'s inventory
-				add {_itm::3} to {_inv}'s inventory
-				add {_itm::4} to {_inv}'s inventory
-				set {_xx} to {_itm::1}
-				set {_container} to block above {_obsi}
-				if {_container} = chest:
-					if {_container} has enough space for {_xx}:
-						add {_xx} to {_container}'s inventory
-						stop
-				drop {_xx} at block above {_obsi}
-			else:
-				message "Not a tool crafter" to player
+	set {_h} to hopper 
+	set {_hopper} to checkBlock({_obsi}, {_h})
+	message "Starting material crafter" to player
+	wait 10 ticks
+	if player's held item is not a bucket:
+		message "Hold a bucket to the material Crafter" to player
+		stop
+	if {_hopper} != empty:
+		stop
+	if number of air in {_hopper}'s inventory = 6:
+		message "Material Crafter is empty"
+		stop
+	loop {pattern_t::*}:
+		loop items in {_hopper}'s inventory:
+			if lore of loop-value-1 = lore of loop-value-2:
+				set {_p} to loop-value-2
+				exit 2 loops
+	if {_p} = empty:
+		message "No pattern detected. Please craft patterns using wooden tools" to player
+		stop
+	set {_y} to lore of {_p}
+	set {_yy::*} to {_y} split by ":"
+	set {_out} to air
+	set {_cost} to air
+	set {_main} to air
+	loop {cost_t::%{_yy::2}%::v::*}:
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				set {_out} to {item_t::%{_yy::2}%::p::%loop-index-1%}
+				set {_cost::*} to {item_t::%{_yy::2}%::c::%loop-index-1%} split by "||"
+				set {_main} to loop-value-1
 
+	loop items in {_hopper}'s inventory:
+		if loop-value = {_main}:
+			message "test" to player
+			# YOU STOP HERE
 on craft wooden tools:
 	set {_n} to "%item%" parsed as a text
 	set {_w::*} to {_n} split by "_"
@@ -144,6 +202,8 @@ on craft iron tools:
 on craft gold tools:
 	cancel event
 	message "Please craft patterns using wooden tool and use a tool crafter" to player
+
+
 on rightclick holding blue glass block:
 	if player's held item is blue glass block named "<blue>Mana Stone":
 		cancel event
@@ -162,78 +222,6 @@ on rightclick holding blue glass block:
 			set {useMana.%player%} to false
 		else:
 			send "Charging your mana please wait" to player
-function toolcraft(t: item, m: item, s: item, p: player) :: items:
-	set {_pat::*} to lore of {_t} split by ":"
-	set {_mat::*} to lore of {_m} split by ":"
-	set {_c} to {cost::%{_pat::2}%}
-	set {_x::*} to {_c} split by "||"
-	set {_ma} to "%{_x::1}%" parsed as an integer
-	set {_sa} to "%{_x::2}%" parsed as an integer
-	if item size of {_m} > {_ma}:
-		set item size of {_m} to item size of {_m} - {_ma}
-	else:
-		stop
-	if {_s} is not air:
-		if item size of {_s} > {_sa}:
-			set item size of {_s} to item size of {_s} - {_sa}
-		else:
-			stop
-	set {_ret::1} to ("%{_mat::2}% %{_pat::2}%" parsed as an item) named "&5Pure %{_mat::2}% %{_pat::2}%" with lore "&7Soulbound-%{_p}%"
-	set {_ret::2} to {_t}
-	set {_ret::3} to {_m}
-	set {_ret::4} to {_s}
-	return {_ret::*}
-function goldbar(r: number, p: player, b: block):
-	if {_p} has enough space for gold ingot named "<gold>Gold Bar" with lore "&5Material:gold":
-		if item amount of {_p}'s tool is {_r}:
-			set {_p}'s held item to air
-		else:
-			remove {_r} from item amount of {_p}'s tool
-		send "Crafting <gold>Gold Bar" to {_p}
-		loop {@waitfor} * 2 times:
-			wait for 10 ticks
-			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
-			play lava pop on {_b}
-		play mob spawner flames on {_b}
-		set {_i} to 1 gold ingot named "<gold>Gold Bar" with lore "&5Material:gold"
-		add {_i} to the inventory of {_p} 
-		send "Successfuly crafted a <gold>Gold Bar" to {_p}
-	else:
-		send "You dont have enough space for a <gold>Gold bar" to {_p}
-function ironbar(r: number, p: player, b: block):
-	if {_p} has enough space for iron ingot named "<gold>Iron Bar" with lore "&5Material:iron":
-		if item amount of {_p}'s tool is {_r}:
-			set {_p}'s held item to air
-		else:
-			remove {_r} from item amount of {_p}'s tool
-		send "Crafting <gold>Iron Bar" to {_p}
-		loop {@waitfor} * 2 times:
-			wait for 10 ticks
-			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
-			play lava pop on {_b}
-		play mob spawner flames on {_b}
-		set {_i} to 1 iron ingot named "<gold>Iron Bar" with lore "&5Material:iron"
-		add {_i} to the inventory of {_p} 
-		send "Successfuly crafted a <gold>Iron Bar" to {_p}
-	else:
-		send "You dont have enough space for a <gold>Iron bar" to {_p}
-function diamondplate(r: number, p: player, b: block):
-	if {_p} has enough space for diamond named "<gold>Diamond Plate" with lore "&5Material:diamond":
-		if item amount of {_p}'s tool is {_r}:
-			set {_p}'s held item to air
-		else:
-			remove {_r} from item amount of {_p}'s tool
-		send "Crafting <gold>Diamond Plate" to {_p}
-		loop {@waitfor} * 2 times:
-			wait for 10 ticks
-			play sound "block.anvil.place" with volume 1 and pitch 1 at {_b}'s location for all players
-			play lava pop on {_b}
-		play mob spawner flames on {_b}
-		set {_i} to 1 diamond named "<gold>Diamond Plate" with lore "&5Material:diamond"
-		add {_i} to the inventory of {_p} 
-		send "Successfuly crafted a <gold>Diamond Plate" to {_p}
-	else:
-		send "You dont have enough space for a <gold>Iron bar" to {_p}
 function crystal(r: number, p: player, b: block):
 	if {_p} has enough space for blue glass block named "<blue>Mana Stone":
 		if item amount of {_p}'s tool is {_r}:
