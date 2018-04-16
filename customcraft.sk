@@ -5,106 +5,104 @@ options:
 	conscrystal: 16
 	outcrystal: 1
 	waitforc: 4
-on load:
-	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
-	register new shaped recipe for {_chestplate} using oak_plank, air, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank, oak_plank
-	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
-	register new shaped recipe for {_chestplate} using oak_plank, oak_plank, oak_plank, oak_plank, air, oak_plank, oak_plank, air, oak_plank
-	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
-	register new shaped recipe for {_chestplate} using oak_plank, oak_plank, oak_plank, oak_plank, air, oak_plank, air, air, air
-	set {_chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
-	register new shaped recipe for {_chestplate} using air, air, air, oak_plank, air, oak_plank, oak_plank, air, oak_plank
-	
-	#
-	# Patterns
-	#
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
+variables:
 	#
 	# VALID ITEMS FOR 
 	#
-	set {v::1} to iron ingot named "<white>Iron bar" with lore "&5Material:iron"
-	set {v::2} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
-	set {v::3} to diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
-	#
-	# TOOL CRAFTER
-	#
-	# -----------------------------MATERIAL PLATE
-	set {pattern_t::plate} to wooden pressure plate named "&3Pattern" with lore "&5Material:Plate"
-	set {cost_t::plate::c::1} to "4||2"
-	set {item_t::plate::v::1} to iron ingot
-	set {item_t::plate::p::1} to iron ingot named "<white>Iron bar" with lore "&5Material:iron"
-	set {cost_t::plate::c::2} to "4||2"
-	set {item_t::plate::v::2} to gold ingot
-	set {item_t::plate::p::2} to gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
-	set {cost_t::plate::c::3} to "4||2"
-	set {item_t::plate::v::3} to diamond
-	set {item_t::plate::p::3} to diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
-	set {item_t::plate::s::1} to coal
-	# -----------------------------TOOL SWORD
-	set {pattern_t::sword} to wooden pressure plate named "&3Pattern" with lore "&5Item:sword"
-	set {cost_t::sword} to "2||1||1||1"
-	set {item_t::sword::v::*} to {v::*}
-	# -----------------------------TOOL AXE
-	set {pattern_t::axe} to wooden pressure plate named "&3Pattern" with lore "&5Item:axe"
-	set {cost_t::axe} to "3||2||1||1"
-	# -----------------------------TOOL PICKAXE
-	set {pattern_t::pickaxe} to wooden pressure plate named "&3Pattern" with lore "&5Item:pickaxe"
-	set {cost_t::pickaxe} to "3||2||1||1"
-	# -----------------------------TOOL SHOVEL
-	set {pattern_t::shovel} to wooden pressure plate named "&3Pattern" with lore "&5Item:shovel"
-	set {cost_t::shovel} to "1||2||1||1"
-	# -----------------------------TOOL HOE
-	set {pattern_t::hoe} to wooden pressure plate named "&3Pattern" with lore "&5Item:hoe"
-	set {cost_t::hoe} to "2||2||1||1"
-	# -----------------------------ARMOR HELM
-	set {pattern_t::helm} to wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
-	set {cost_t::helm} to "5||0||0||2"
-	# -----------------------------ARMOR CHESTPLATE
-	set {pattern_t::chestplate} to wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
-	set {cost_t::chestplate} to "8||0||0||4"
-	# -----------------------------ARMOR LEGGINGS
-	set {pattern_t::leggings} to wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
-	set {cost_t::leggings} to "7||0||0||3"
-	# -----------------------------ARMOR BOOTS
-	set {pattern_t::boots} to wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
-	set {cost_t::boots} to "4||0||0||2"
+	{v::1} = iron ingot named "<white>Iron bar" with lore "&5Material:iron"
+	{v::2} = gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
+	{v::3} = diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
 	#
 	# MATERIAL CRAFTER
 	#
 	# -----------------------------MATERIAL NAIL
-	set {pattern_m::nail} to wooden pressure plate named "&3Pattern" with lore "&5Material:nail"
-	set {cost_m::nail} to "1||1"
-	set {item_m::nail::1} to iron ingot
-	set {item_m::nail::2} to coal
-	set {val::nail} to stick named "<white>Iron Nail" with lore "&5SubMaterial:nail"
+	{pattern_m::nail} = wooden pressure plate named "&3Pattern" with lore "&5Material:nail"
+	{cost_m::nail} = "1||1"
+	{item_m::nail::1} = iron ingot
+	{item_m::nail::2} = coal
+	{val::nail} = tripwire hook named "<white>Iron Nail" with lore "&5SubMaterial:nail"
 	# -----------------------------MATERIAL RIVET
-	set {pattern_m::rivet} to wooden pressure plate named "&3Pattern" with lore "&5Material:rivet"
-	set {cost_m::rivet} to "1||1"
-	set {item_m::rivet::1} to iron ingot
-	set {item_m::rivet::2} to charcoal
-	set {val::rivet} to stick named "<white>Iron Rivet" with lore "&5SubMaterial:rivet"
+	{pattern_m::rivet} = wooden pressure plate named "&3Pattern" with lore "&5Material:rivet"
+	{cost_m::rivet} = "1||1"
+	{item_m::rivet::1} = iron ingot
+	{item_m::rivet::2} = charcoal
+	{val::rivet} = tripwire hook named "<white>Iron Rivet" with lore "&5SubMaterial:rivet"
 
-# ---------- CRAFT TRIGGER EVENT
-on rightclick on a oak plank:
+	#
+	# TOOL CRAFTER
+	#
+	# -----------------------------MATERIAL PLATE
+	{pattern_t::plate} = wooden pressure plate named "&3Pattern" with lore "&5Material:plate"
+	{cost_t::plate::c::1} = "4||2"
+	{item_t::plate::v::1} = iron ingot
+	{item_t::plate::p::1} = iron ingot named "<white>Iron bar" with lore "&5Material:iron"
+	{cost_t::plate::c::2} = "4||2"
+	{item_t::plate::v::2} = gold ingot
+	{item_t::plate::p::2} = gold ingot named "<gold>Gold bar" with lore "&5Material:gold"
+	{cost_t::plate::c::3} = "4||2"
+	{item_t::plate::v::3} = diamond
+	{item_t::plate::p::3} = diamond named "<blue>Diamond Plate" with lore "&5Material:diamond"
+	{item_t::plate::s::1} = coal
+	# -----------------------------TOOL SWORD
+	{pattern_t::sword} = wooden pressure plate named "&3Pattern" with lore "&5Item:sword"
+	{cost_t::sword::c::1} = "2||1||1||1"
+	{cost_t::sword::c::2} = "2||1||1||1"
+	{cost_t::sword::c::3} = "2||1||1||1"
+	{item_t::sword::p::1} = iron sword named "<white>Forge Iron Sword" with lore "test"
+	{item_t::sword::p::2} = gold sword named "<gold>Forge Gold Sword" with lore "test"
+	#{item_t::sword::p::3} = diamond sword named "<blue>Forge Diamond Sword" with lore "test"
+	#{item_t::sword::v::*} = {v::*}
+	#{item_t::sword::s::1} = stick
+	#{item_t::sword::s::2} = tripwire hook named "<white>Iron Nail" with lore "&5SubMaterial:nail"
+	#{item_t::sword::s::3} = tripwire hook named "<white>Iron Rivet" with lore "&5SubMaterial:rivet"
+	# -----------------------------TOOL AXE
+	{pattern_t::axe} = wooden pressure plate named "&3Pattern" with lore "&5Item:axe"
+	{cost_t::axe} = "3||2||1||1"
+	# -----------------------------TOOL PICKAXE
+	{pattern_t::pickaxe} = wooden pressure plate named "&3Pattern" with lore "&5Item:pickaxe"
+	{cost_t::pickaxe} = "3||2||1||1"
+	# -----------------------------TOOL SHOVEL
+	{pattern_t::shovel} = wooden pressure plate named "&3Pattern" with lore "&5Item:shovel"
+	{cost_t::shovel} = "1||2||1||1"
+	# -----------------------------TOOL HOE
+	{pattern_t::hoe} = wooden pressure plate named "&3Pattern" with lore "&5Item:hoe"
+	{cost_t::hoe} = "2||2||1||1"
+	# -----------------------------ARMOR HELM
+	{pattern_t::helm} = wooden pressure plate named "&3Pattern" with lore "&5Item:helm"
+	{cost_t::helm} = "5||0||0||2"
+	# -----------------------------ARMOR CHESTPLATE
+	{pattern_t::chestplate} = wooden pressure plate named "&3Pattern" with lore "&5Item:chestplate"
+	{cost_t::chestplate} = "8||0||0||4"
+	# -----------------------------ARMOR LEGGINGS
+	{pattern_t::leggings} = wooden pressure plate named "&3Pattern" with lore "&5Item:leggings"
+	{cost_t::leggings} = "7||0||0||3"
+	# -----------------------------ARMOR BOOTS
+	{pattern_t::boots} = wooden pressure plate named "&3Pattern" with lore "&5Item:boots"
+	{cost_t::boots} = "4||0||0||2"
+command /patterns:
+	trigger:
+		set {_ch} to chest with 4 rows named "<blue>Pattern List"
+		loop {pattern_t::*}:
+			add loop-value  to {_ch}
+		loop {pattern_m::*}:
+			add loop-value  to {_ch}
+		open {_ch} to player 
+#====================================================MATERIAL CRAFTER
+on rightclick on a gravel:
 	set {_wood} to targeted block
 	set {_h} to hopper 
 	set {_hopper} to checkBlock({_wood}, {_h})
+	set {_lava} to checkBlock({_wood}, lava)
+	set {_water} to checkBlock({_wood}, water)
+	wait 10 ticks
+	if {_lava} is not set:
+		stop
+	if {_hopper} is not set:
+		stop
 	message "Starting material crafter" to player
 	wait 10 ticks
 	if player's held item is not a bucket:
 		message "Hold a bucket to the material Crafter" to player
-		stop
-	if {_hopper} != empty:
 		stop
 	if number of air in {_hopper}'s inventory = 6:
 		message "Material Crafter is empty"
@@ -131,36 +129,63 @@ on rightclick on a oak plank:
 		if {_bool} = false:
 			message "Ingridient %loop-value-1% is missing" to player
 			stop
+	set {_loopval} to 1
 	loop {item_m::%{_yy::2}%::*}:
 		loop items in {_hopper}'s inventory:
 			if loop-value-1 = loop-value-2:
-				if item size of loop-value-2 >= {_xx::%loop-index-1%}:
+				if item size of loop-value-2 >= {_xx::%{_loopval}%} parsed as a number:
 					exit 1 loop
 				else:
 					message "Not enough %loop-value-1%" to player
+					message "Needs: %{_xx::%loop-index-1%}% In Hopper: %item size of loop-value-2%"
 					stop
+		add 1 to {_loopval}
+	set {_loopval} to 1
 	loop {item_m::%{_yy::2}%::*}:
 		loop items in {_hopper}'s inventory:
 			if loop-value-1 = loop-value-2:
-				set {_cnt} to {_xx::%loop-index-1%} parsed as a number
+				set {_cnt} to {_xx::%{_loopval}%} parsed as a number
 				set {_cntx} to item size of loop-value-2
 				if {_cntx} - {_cnt} = 0:
 					set loop-value-2 to air
 					exit 1 loop
 				else:
-					set item size of loop-value-2 to item size of {_cntx} - {_cnt}
+					set {_holder} to loop-value-2
+					set item size of {_holder} to {_cntx} - {_cnt}
+					set loop-value-2 to {_holder}
 					exit 1 loop
-	
+		add 1 to {_loopval}
+	play sound "block.fire.extinguish" with volume 1 and pitch 1 at {_wood}'s location for all players
+	play 5 lava pop on {_wood}
+	wait 10 ticks
+	play sound "block.anvil.place" with volume 0.8 and pitch 1 at {_wood}'s location for all players
+	play 5 lava pop on {_wood}
+	if random number from 0 to 10 = 1:
+		if {_water} is set:
+			set the block at {_water}'s location to stone
+		else:
+			set player on fire for 5 seconds
+			message "No water reserve" to player
+		
+	if {_hopper} has enough space for {val::%{_yy::2}%}:
+		add {val::%{_yy::2}%} to {_hopper}'s inventory
+		stop
+	drop {val::%{_yy::2}%} at block above {_hopper}
+#====================================================TOOL CRAFTER
 on rightclick on a obsidian:
 	set {_obsi} to targeted block
 	set {_h} to hopper 
+	set {_ch} to iron block
 	set {_hopper} to checkBlock({_obsi}, {_h})
-	message "Starting material crafter" to player
-	wait 10 ticks
+	set {_chest} to checkBlock({_obsi}, chest)
+	message "Starting tool crafter" to player
 	if player's held item is not a bucket:
 		message "Hold a bucket to the material Crafter" to player
 		stop
-	if {_hopper} != empty:
+	if {_chest} is not set:
+		broadcast "chestnot set"
+		stop
+	if {_hopper} is not set:
 		stop
 	if number of air in {_hopper}'s inventory = 6:
 		message "Material Crafter is empty"
@@ -178,17 +203,84 @@ on rightclick on a obsidian:
 	set {_out} to air
 	set {_cost} to air
 	set {_main} to air
-	loop {cost_t::%{_yy::2}%::v::*}:
+	loop {item_t::%{_yy::2}%::v::*}:
 		loop items in {_hopper}'s inventory:
 			if loop-value-1 = loop-value-2:
 				set {_out} to {item_t::%{_yy::2}%::p::%loop-index-1%}
-				set {_cost::*} to {item_t::%{_yy::2}%::c::%loop-index-1%} split by "||"
+				set {_cost::*} to {cost_t::%{_yy::2}%::c::%loop-index-1%} split by "||"
 				set {_main} to loop-value-1
-
+	#--CHECK IF MAIN ITEM EXIST-----------------------------------------
+	set {_bool} to false
 	loop items in {_hopper}'s inventory:
 		if loop-value = {_main}:
-			message "test" to player
-			# YOU STOP HERE
+			set {_bool} to true
+			exit 1 loop
+	if {_bool} = false:
+		message "No valid main material for this pattern" to player
+		stop
+	#--CHECK IF SUB ITEM EXIST-------------------------------------------
+	loop {item_t::%{_yy::2}%::s::*}:
+		set {_bool} to false
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				set {_bool} to true
+				exit 1 loop
+		if {_bool} = false:
+			message "Ingridient %loop-value% is missing" to player
+			stop
+	#--CHECK IF MAIN ITEM HAVE ENOUGH COUNT-------------------------------
+	loop items in {_hopper}'s inventory:
+		if loop-value = {_main}:
+			if item size of loop-value >= {_cost::1} parsed as a number:
+				exit 1 loop
+			else:
+				message "Not enough %{_main}%" to player
+				message "Needs: %{_cost::1}% In Hopper: %item size of loop-value%"
+				stop
+	#--CHECK IF SUB ITEM HAVE ENOUGH COUNT--------------------------------
+	set {_loopval} to 2
+	loop {item_t::%{_yy::2}%::s::*}:
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				if item size of loop-value-2 >= {_cost::%{_loopval}%} parsed as a number:
+					exit 1 loop
+				else:
+					message "Not enough %loop-value-1%" to player
+					message "Needs: %{_cost::%{_loopval}%}% In Hopper: %item size of loop-value-2%"
+					stop		
+		add 1 to {_loopval}
+	#--REDUCE MAIN ITEM--------------------------------
+	loop items in {_hopper}'s inventory:
+		if loop-value = {_main}:
+			set {_cnt} to {_cost::1} parsed as a number
+			set {_cntx} to item size of loop-value
+			if {_cntx} - {_cnt} = 0:
+				set loop-value to air
+				exit 1 loop
+			else:
+				set {_holder} to loop-value
+				set item size of {_holder} to {_cntx} - {_cnt}
+				set loop-value to {_holder}
+				exit 1 loop
+	#--REDUCE SUB ITEM--------------------------------
+	set {_loopval} to 2
+	loop {item_t::%{_yy::2}%::s::*}:
+		loop items in {_hopper}'s inventory:
+			if loop-value-1 = loop-value-2:
+				set {_cnt} to {_cost::%{_loopval}%} parsed as a number
+				set {_cntx} to item size of loop-value-2
+				if {_cntx} - {_cnt} = 0:
+					set loop-value-2 to air
+					exit 1 loop
+				else:
+					set {_holder} to loop-value-2
+					set item size of {_holder} to {_cntx} - {_cnt}
+					set loop-value-2 to {_holder}
+					exit 1 loop		
+		add 1 to {_loopval}
+
+	drop {_out} at block above {_obsi}
+
 on craft wooden tools:
 	set {_n} to "%item%" parsed as a text
 	set {_w::*} to {_n} split by "_"
@@ -243,11 +335,13 @@ function crystal(r: number, p: player, b: block):
 function checkBlock(m: block, s: item) :: block:
 	if the block north of {_m} is {_s}:
 		return block north of {_m}
-	else if the block south of {_m} is {_s}:
+	if the block south of {_m} is {_s}:
 		return block south of {_m}
-	else if the block east of {_m} is {_s}:
+	if the block east of {_m} is {_s}:
 		return block east of {_m}
-	else if the block west of {_m} is {_s}:
+	if the block west of {_m} is {_s}:
 		return block west of {_m}
+	else:
+		return block at location(-1,-1,-1)
 
 	
